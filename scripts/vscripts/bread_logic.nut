@@ -967,7 +967,9 @@ Bread.BreadBossSetup <- function(breadboss) {
 
     Bread.breadorigin <- Entities.FindByName(null, "breadorigin")
 
-    EntFire("breadtank", "SetSpeed", "200", 2, null)
+    //EntFire("breadtank", "SetSpeed", "200", 2, null)
+    EntFire("tf_gamerules", "RunScriptCode", "Bread.SetBreadTankSpeed(`200`)", 2, null)
+
     Bread.breadboss <- breadboss
     Bread.SEQ_IDLE <- Bread.breadboss.LookupSequence("idle")
     Bread.SEQ_BITE <- Bread.breadboss.LookupSequence("bite")
@@ -1902,6 +1904,19 @@ Bread.CreateStrikeMarker <- function(projectile) {
     scope.oldpos <- GetLocationBelow(projectile)
     AddThinkToEnt(projectile, "StrikeMarkerThink")
 }
+
+Bread.breadtank <- null
+Bread.SetBreadTank <- function(tank) {
+    Bread.breadtank <- tank
+}
+Bread.SetBreadTankSpeed <- function(spd) {
+    if(Bread.breadtank == null) {if(dbug)ClientPrint(null,3,"something fucked up")}
+    EntFireByHandle(Bread.breadtank, "SetSpeed", spd, 0, null, null)
+}
+Bread.KillBreadTank <- function() {
+    EntFireByHandle(Bread.breadtank, "kill", null, 0, null, null)
+}
+
 // ///////////////////// Debug ///////////////////
 // Setting a error handler allows us to view vscript error messages, even if we are not testing locally i.e. on potato testing server
 // Bread.DebugSteamIds <- {}
